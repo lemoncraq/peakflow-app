@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Запись измерения</title>
+    <link rel="stylesheet" th:href="@{/css/record_form.css}" />
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+<h1>Запись показателя пикфлоуметрии</h1>
+<div id="current-time-container"></div>
+<button hx-get="/current-time" hx-target="#current-time-container" hx-swap="innerHTML">
+    Получить текущее время
+</button>
+
+<form action="/record" method="post" th:object="${measurement}">
+    <div>
+        <label for="date">Дата измерения:</label>
+        <input type="date" id="date" th:field="*{date}"/>
+        <p th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error-message"></p>
+    </div>
+
+    <div>
+        <label for="timeOfDay">Время суток:</label>
+        <select id="timeOfDay" th:field="*{timeOfDay}">
+            <option th:each="time : ${timeOfDays}" th:value="${time}" th:text="${time}"></option>
+        </select>
+        <p th:if="${#fields.hasErrors('timeOfDay')}" th:errors="*{timeOfDay}" class="error-message"></p>
+    </div>
+
+    <div>
+        <label for="peakFlow">Значение (л/мин):</label>
+        <input type="number" id="peakFlow" th:field="*{peakFlow}" />
+        <p th:if="${#fields.hasErrors('peakFlow')}" th:errors="*{peakFlow}" class="error-message"></p>
+    </div>
+
+    <div>
+        <label>Симптомы:</label><br />
+        <div th:each="symptom : ${symptoms}">
+            <input type="checkbox" th:field="*{dailySymptoms}" th:value="${symptom}" th:text="${symptom}" />
+        </div>
+        <p th:if="${#fields.hasErrors('dailySymptoms')}" th:errors="*{dailySymptoms}" class="error-message"></p>
+    </div>
+
+    <button type="submit">Сохранить</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Успешно!</title>
+  <link rel="stylesheet" th:href="@{/css/record_success.css}" />
+</head>
+<body>
+<h1>Данные успешно сохранены!</h1>
+<p>Вы записали следующие данные:</p>
+<ul>
+  <li th:text="${measurement.date}">Дата: 2025-04-28</li>
+  <li th:text="${measurement.timeOfDay}">Время суток: Утро</li>
+  <li th:text="${measurement.peakFlow}">Значение: 550 л/мин</li>
+  <li>Симптомы:
+    <ul th:if="${not #sets.isEmpty(measurement.dailySymptoms)}">
+      <li th:each="symptom : ${measurement.dailySymptoms}" th:text="${symptom}">Кашель</li>
+    </ul>
+    <p th:if="${#sets.isEmpty(measurement.dailySymptoms)}">Нет выбранных симптомов.</p>
+  </li>
+</ul>
+<p><a href="/record">Записать еще одно измерение</a></p>
+</body>
+</html>
