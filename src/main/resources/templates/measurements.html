@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Все измерения</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+    <h1>Список всех измерений</h1>
+    <table th:if="${not #lists.isEmpty(measurements)}">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время суток</th>
+                <th>Значение (л/мин)</th>
+                <th>Симптомы</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="measurement : ${measurements}">
+            <td th:text="${#temporals.format(measurement.date, 'dd-MM-yyyy')}"></td>
+            <td th:text="${measurement.timeOfDay}"></td>
+            <td th:text="${measurement.peakFlow}"></td>
+            <td>
+                <ul th:if="${not #sets.isEmpty(measurement.dailySymptoms)}">
+                    <li th:each="symptom : ${measurement.dailySymptoms}" th:text="${symptom}"></li>
+                </ul>
+                <p th:if="${#sets.isEmpty(measurement.dailySymptoms)}">Нет симптомов</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${#lists.isEmpty(measurements)}">Нет сохраненных измерений.</p>
+    <p><a href="/record">Записать новое измерение</a></p>
+</body>
+</html>

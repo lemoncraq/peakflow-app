@@ -1,5 +1,6 @@
 package com.example.peakflow_app.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -7,11 +8,17 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Entity
+@Table(name = "measurements")
 public class Measurement {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message = "Дата измерения обязательна для заполнения.")
     private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "Время суток обязательно для выбора.")
     private TimeOfDay timeOfDay;
 
@@ -19,7 +26,11 @@ public class Measurement {
     @Min(value = 50, message = "Значение пикфлоу должно быть не меньше 50.")
     @Max(value = 800, message = "Значение пикфлоу должно быть не больше 800.")
     private Integer peakFlow;
-    
+
+    @ElementCollection(targetClass = Symptom.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "measurement_symptoms", joinColumns = @JoinColumn(name = "measurement_id"))
+    @Column(name = "symptom")
     private Set<Symptom> dailySymptoms;
 
     public Measurement() {
@@ -67,5 +78,13 @@ public class Measurement {
 
     public void setDailySymptoms(Set<Symptom> dailySymptoms) {
         this.dailySymptoms = dailySymptoms;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

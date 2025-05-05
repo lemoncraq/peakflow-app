@@ -7,10 +7,6 @@
 </head>
 <body>
 <h1>Запись показателя пикфлоуметрии</h1>
-<div id="current-time-container"></div>
-<button hx-get="/current-time" hx-target="#current-time-container" hx-swap="innerHTML">
-    Получить текущее время
-</button>
 
 <form action="/record" method="post" th:object="${measurement}">
     <div>
